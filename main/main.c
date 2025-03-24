@@ -18,14 +18,17 @@
 QueueHandle_t xQueueDistance;
 SemaphoreHandle_t xSemaphoreTrigger;
 
-void trigger_task(void *p) {
+void trigger_task(void *p)
+{
     gpio_init(TRIG_PIN);
     gpio_set_dir(TRIG_PIN, GPIO_OUT);
-    while (true) {
+    
+    while (true)
+    {
         gpio_put(TRIG_PIN, 1);
-        busy_wait_us(10);
+        vTaskDelay(pdMS_TO_TICKS(10)); // Pulso de 10ms
         gpio_put(TRIG_PIN, 0);
-        vTaskDelay(pdMS_TO_TICKS(100));
+        vTaskDelay(pdMS_TO_TICKS(50)); // Aguarda 50ms antes de repetir
     }
 }
 
