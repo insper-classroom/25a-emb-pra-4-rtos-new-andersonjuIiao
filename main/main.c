@@ -26,9 +26,9 @@ void trigger_task(void *p)
     while (true)
     {
         gpio_put(TRIG_PIN, 1);
-        vTaskDelay(pdMS_TO_TICKS(10)); // Pulso de 10ms
+        vTaskDelay(pdMS_TO_TICKS(10));
         gpio_put(TRIG_PIN, 0);
-        vTaskDelay(pdMS_TO_TICKS(50)); // Aguarda 50ms antes de repetir
+        vTaskDelay(pdMS_TO_TICKS(50));
     }
 }
 
@@ -59,11 +59,18 @@ void oled_task(void *p) {
             if (xQueueReceive(xQueueDistance, &distance, 0)) {
                 gfx_clear_buffer(&disp);
                 char buffer[16];
-                sprintf(buffer, "Dist: %.2f cm", distance);
-                gfx_draw_string(&disp, 0, 0, 1, buffer);
-                int bar_length = (int)(128 * distance / 300);
-                gfx_draw_line(&disp, 15, 27, bar_length, 27);
-                gfx_show(&disp);
+                if (distance <400){
+                    sprintf(buffer, "Dist: %.2f cm", distance);
+                    gfx_draw_string(&disp, 0, 0, 1, buffer);
+                    int bar_length = (128 * distance / 300);
+                    gfx_draw_line(&disp, 15, 27, bar_length, 27);
+                    gfx_show(&disp);
+                }
+                else {
+                    gfx_clear_buffer(&disp);
+                    gfx_draw_string(&disp, 0, 0, 1, "Sensor Falhou");
+                    gfx_show(&disp);
+                }
             }
         } else {
             gfx_clear_buffer(&disp);
