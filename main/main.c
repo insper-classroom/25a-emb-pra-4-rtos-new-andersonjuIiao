@@ -60,7 +60,7 @@ void oled_task(void *p) {
                 gfx_clear_buffer(&tela);
                 if (distancia < 400) {
                     {
-                        char buf[16];
+                        char buf[32];
                         sprintf(buf, "Distancia: %.3f cm", distancia);
                         gfx_draw_string(&tela, 0, 0, 1, buf);
                     }
