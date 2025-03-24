@@ -49,34 +49,34 @@ void echo_task(void *p) {
 }
 
 void oled_task(void *p) {
-    ssd1306_t disp;
+    ssd1306_t tela;
     ssd1306_init();
-    gfx_init(&disp, 128, 32);
+    gfx_init(&tela, 128, 32);
     
     while (true) {
         if (xSemaphoreTake(xSemaphoreTrigger, pdMS_TO_TICKS(500)) == pdTRUE) {
             float distance;
             if (xQueueReceive(xQueueDistance, &distance, 0)) {
-                gfx_clear_buffer(&disp);
+                gfx_clear_buffer(&tela);
                 if (distance < 400) {
                     {
                         char buf[16];
                         sprintf(buf, "Dist: %.2f cm", distance);
-                        gfx_draw_string(&disp, 0, 0, 1, buf);
+                        gfx_draw_string(&tela, 0, 0, 1, buf);
                     }
-                    int bar_length = (128 * distance / 300);
-                    gfx_draw_line(&disp, 15, 27, bar_length, 27);
-                    gfx_show(&disp);
+                    int barra = (128 * distance / 300);
+                    gfx_draw_line(&tela, 15, 27, barra, 27);
+                    gfx_show(&tela);
                 } else {
-                    gfx_clear_buffer(&disp);
-                    gfx_draw_string(&disp, 0, 0, 1, "Sensor Falhou");
-                    gfx_show(&disp);
+                    gfx_clear_buffer(&tela);
+                    gfx_draw_string(&tela, 0, 0, 1, "Sensor Falhou");
+                    gfx_show(&tela);
                 }
             }
         } else {
-            gfx_clear_buffer(&disp);
-            gfx_draw_string(&disp, 0, 0, 1, "Sensor Falhou");
-            gfx_show(&disp);
+            gfx_clear_buffer(&tela);
+            gfx_draw_string(&tela, 0, 0, 1, "Sensor Falhou");
+            gfx_show(&tela);
         }
     }
 }
