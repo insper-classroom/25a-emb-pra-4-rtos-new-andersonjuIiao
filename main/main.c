@@ -55,16 +55,16 @@ void oled_task(void *p) {
     
     while (true) {
         if (xSemaphoreTake(xSemaphoreTrigger, pdMS_TO_TICKS(500)) == pdTRUE) {
-            float distance;
-            if (xQueueReceive(xQueueDistance, &distance, 0)) {
+            float distancia;
+            if (xQueueReceive(xQueueDistance, &distancia, 0)) {
                 gfx_clear_buffer(&tela);
-                if (distance < 400) {
+                if (distancia < 400) {
                     {
                         char buf[16];
-                        sprintf(buf, "Dist: %.2f cm", distance);
+                        sprintf(buf, "Distancia: %.3f cm", distancia);
                         gfx_draw_string(&tela, 0, 0, 1, buf);
                     }
-                    int barra = (128 * distance / 300);
+                    int barra = (128 * distancia / 300);
                     gfx_draw_line(&tela, 15, 27, barra, 27);
                     gfx_show(&tela);
                 } else {
