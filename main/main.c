@@ -58,15 +58,16 @@ void oled_task(void *p) {
             float distance;
             if (xQueueReceive(xQueueDistance, &distance, 0)) {
                 gfx_clear_buffer(&disp);
-                char buf[16];
-                if (distance <400){
-                    sprintf(buf, "Dist: %.2f cm", distance);
-                    gfx_draw_string(&disp, 0, 0, 1, buf);
+                if (distance < 400) {
+                    {
+                        char buf[16];
+                        sprintf(buf, "Dist: %.2f cm", distance);
+                        gfx_draw_string(&disp, 0, 0, 1, buf);
+                    }
                     int bar_length = (128 * distance / 300);
                     gfx_draw_line(&disp, 15, 27, bar_length, 27);
                     gfx_show(&disp);
-                }
-                else {
+                } else {
                     gfx_clear_buffer(&disp);
                     gfx_draw_string(&disp, 0, 0, 1, "Sensor Falhou");
                     gfx_show(&disp);
@@ -79,6 +80,7 @@ void oled_task(void *p) {
         }
     }
 }
+
 
 int main() {
     stdio_init_all();
